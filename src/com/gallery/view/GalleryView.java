@@ -41,7 +41,7 @@ public class GalleryView {
 	private JButton btn[];
 	private int sc;
 	private String joinU;
-	private ActionListener listener;
+	private JLabel popupi;
 
 	private JLabel iDLabel;
 	private JLabel lblNewLabel_2;
@@ -86,7 +86,7 @@ public class GalleryView {
 		st.setColumns(10);
 
 		JButton btnSearch = new JButton("");
-		btnSearch.setBorder(new EmptyBorder(0,0,0,0));
+		btnSearch.setBorder(new EmptyBorder(0, 0, 0, 0));
 		btnSearch.setIcon(new ImageIcon(GalleryView.class.getResource("/img/searchimg.jpg")));
 
 		btnSearch.setBounds(912, 102, 60, 42);
@@ -133,17 +133,17 @@ public class GalleryView {
 			}
 		});
 		frmGallery.getContentPane().add(BackMainBtn);
-		
+
 		lblNewLabel_2 = new JLabel("");
 		lblNewLabel_2.setIcon(new ImageIcon(GalleryView.class.getResource("/img/diary.jpg")));
 		lblNewLabel_2.setBounds(53, 45, 151, 42);
 		frmGallery.getContentPane().add(lblNewLabel_2);
-		
+
 		lblNewLabel_3 = new JLabel("");
 		lblNewLabel_3.setIcon(new ImageIcon(GalleryView.class.getResource("/img/dog2.jpg")));
 		lblNewLabel_3.setBounds(12, 26, 49, 65);
 		frmGallery.getContentPane().add(lblNewLabel_3);
-		
+
 		SearchUserLabel = new JLabel("유저 검색");
 		SearchUserLabel.setFont(new Font("경기천년제목 Bold", Font.PLAIN, 14));
 		SearchUserLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -174,15 +174,19 @@ public class GalleryView {
 			inpimageB.setPreferredSize(new Dimension(200, 200));
 			inpimageB.setBackground(new Color(253, 247, 225));
 			panel_1.add(inpimageB);
-
+			
 			inpimageB.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					uploadImage();
+					frmGallery.revalidate();
+					frmGallery.repaint();
+					panel_1.revalidate();
+					panel_1.repaint();
 				}
 			});
 		}
-		frmGallery.revalidate();
-		frmGallery.repaint();
+		
+		
 		btn = new JButton[gdao.getCount(gvo)];
 		sc = gdao.getmaxIno(gvo);
 		for (int i = 0; i < gdao.getCount(gvo); i++) {
@@ -199,13 +203,21 @@ public class GalleryView {
 				btn[i].setBackground(new Color(255, 255, 255));
 				btn[i].setPreferredSize(new Dimension(200, 200));
 				btn[i].setBackground(new Color(253, 247, 225));
-				btn[i].addActionListener(listener = new ActionListener() {
+				btn[i].addActionListener(new ActionListener() {
+
 					public void actionPerformed(ActionEvent e) {
-						clickImage(gvo, btn[bn], icon, ino, gdao.getFileName(ino));
+						clickImage(gvo, btn[bn], icon, ino, gdao.getFileName(ino), nicon);
+						popupi.invalidate();
+						popupi.repaint();
+						popupi = new JLabel();
+						popupi.setIcon(icon);
 					}
 				});
 				panel_1.invalidate();
-			} catch (Exception e1) {
+				panel_1.repaint();
+			} catch (
+
+			Exception e1) {
 				e1.printStackTrace();
 			}
 		}
@@ -240,10 +252,10 @@ public class GalleryView {
 			nib.setBackground(new Color(255, 255, 255));
 			nib.setPreferredSize(new Dimension(200, 200));
 			panel_1.invalidate();
-
+			panel_1.repaint();
 			nib.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					clickImage(gvo, nib, icon, gvo.getNum(), chooser.getSelectedFile().getName());
+					clickImage(gvo, nib, icon, gvo.getNum(), chooser.getSelectedFile().getName(), nicon);
 				}
 			});
 		} catch (NullPointerException e) {
@@ -252,9 +264,11 @@ public class GalleryView {
 
 	}
 
-	private void clickImage(GalleryVO gvo, final JButton c, ImageIcon icon, final int ino, String name) {
+	private void clickImage(GalleryVO gvo, final JButton c, ImageIcon icon, final int ino, String name, ImageIcon nicon) {
 		final JFrame cf = new JFrame(name);
 		cf.setVisible(true);
+		cf.revalidate();
+		cf.repaint();
 		if (icon.getIconWidth() > 900 || icon.getIconHeight() > 900) {
 			Image img = icon.getImage();
 			Image imp = img.getScaledInstance(900, 900, 0);
@@ -276,8 +290,8 @@ public class GalleryView {
 		np.setLayout(new BorderLayout(5, 5));
 
 		System.out.println("clickImage ActionListener");
-
-		final JLabel popupi = new JLabel("");
+		
+		popupi = new JLabel();
 		np.add(popupi, BorderLayout.CENTER);
 		popupi.setIcon(icon);
 
@@ -293,6 +307,7 @@ public class GalleryView {
 
 			editb.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					
 					JFileChooser chooser = new JFileChooser();
 					FileNameExtensionFilter filter = new FileNameExtensionFilter("Image", "JPG", "JPEG", "PNG");
 					chooser.setFileFilter(filter);
@@ -311,31 +326,27 @@ public class GalleryView {
 						Image img = icon.getImage();
 						Image nimg = img.getScaledInstance(235, 210, 0);
 						ImageIcon nicon = new ImageIcon(nimg);
-						cf.setSize(icon.getIconWidth(), icon.getIconHeight());
+						cf.setSize(nicon.getIconWidth(), nicon.getIconHeight());
 						Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
 						Dimension dimension2 = cf.getSize();
 						int x = (dimension.width - dimension2.width) / 2;
 						int y = (dimension.height - dimension2.height) / 2;
-						popupi.setIcon(icon);
+						
+						cf.dispose();
 						cf.setLocation(x, y);
 						if (dimension2.width < 150 || dimension2.height < 150) {
 							cf.setSize(200, 200);
 						}
 						cf.setTitle(chooser.getSelectedFile().getName());
-						c.setIcon(nicon);
+						
+						c.setIcon(icon);
 						c.setBackground(new Color(255, 255, 255));
 						c.setPreferredSize(new Dimension(200, 200));
-						panel_1.invalidate();
-						panel_1.repaint();
-						c.removeActionListener(listener);
 						c.invalidate();
 						c.repaint();
-						c.addActionListener(listener = new ActionListener() {
-							public void actionPerformed(ActionEvent e) {
-								clickImage(gvo, c, icon, ino, gvo.getImagename());
-								cf.dispose();
-							}
-						});
+						panel_1.invalidate();
+						panel_1.repaint();
+
 					} catch (NullPointerException e1) {
 						JOptionPane.showMessageDialog(null, "파일을 선택하지 않았습니다.", "경고", JOptionPane.WARNING_MESSAGE);
 					}
@@ -395,7 +406,7 @@ public class GalleryView {
 					panel.add(btnNewButton_1);
 				}
 			});
-		} 
+		}
 	}
 
 	public static void main(String[] args) {

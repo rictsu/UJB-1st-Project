@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URI;
 
+
 import javax.swing.JFrame;
 import java.awt.Color;
 import java.awt.Desktop;
@@ -17,8 +18,8 @@ import javax.swing.JTextField;
 
 
 import javax.swing.JButton;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
+
+import java.awt.Font;
 
 public class MapView {
 
@@ -56,7 +57,7 @@ public class MapView {
 		
 		frame = new JFrame();
 		frame.getContentPane().setBackground(new Color(255, 255, 255));
-		frame.setBounds(100, 100, 498, 745);
+		frame.setBounds(100, 100, 498, 510);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
@@ -71,7 +72,8 @@ public class MapView {
 		frame.getContentPane().add(lblNewLabel_2);
 		
 		SearchHospitalText = new JTextField();
-		SearchHospitalText.setBounds(12, 675, 349, 21);
+		SearchHospitalText.setFont(new Font("경기천년제목 Bold", Font.PLAIN, 14));
+		SearchHospitalText.setBounds(12, 428, 349, 32);
 		frame.getContentPane().add(SearchHospitalText);
 		SearchHospitalText.addActionListener(new ActionListener() {
 			
@@ -81,10 +83,15 @@ public class MapView {
 				SearchBtn.doClick();
 			}
 		});
+		
+			
+			
 		SearchHospitalText.setColumns(10);
 		
 		SearchBtn = new JButton("검색");
-		SearchBtn.setBounds(373, 674, 97, 23);
+		SearchBtn.setBackground(new Color(192, 192, 192));
+		SearchBtn.setIcon(new ImageIcon(MapView.class.getResource("/img/search-line.png")));
+		SearchBtn.setBounds(373, 428, 97, 33);
 		SearchBtn.addActionListener(new ActionListener() {
 			
 			@Override
@@ -109,14 +116,6 @@ public class MapView {
 			
 		});
 		frame.getContentPane().add(SearchBtn);
-		
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(12, 72, 458, 579);
-		frame.getContentPane().add(scrollPane);
-		
-		JPanel SearchResulPanel = new JPanel();
-		SearchResulPanel.setBackground(new Color(255, 255, 255));
-		scrollPane.setViewportView(SearchResulPanel);
 		
 	}
 	public void ShowWindow() {
